@@ -11,6 +11,11 @@ namespace April2022.StepDefinitions
     public class TMFeatureStepDefinitions : CommonDriver
 
     {
+        //page objects initialization
+        LoginPage loginPageObj = new LoginPage();
+        HomePage homePageObj = new HomePage();
+        TMPage tMPageObj = new TMPage();
+
         [Given(@"I logged into turn up portal successfully")]
         public void GivenILoggedIntoTurnUpPortalSuccessfully()
         {
@@ -19,7 +24,7 @@ namespace April2022.StepDefinitions
             driver.Manage().Window.Maximize();
 
             // Login page object initialization and definition
-            LoginPage loginPageObj = new LoginPage();
+         
             loginPageObj.LoginSteps(driver);
         }
 
@@ -27,7 +32,7 @@ namespace April2022.StepDefinitions
         public void WhenINavigateToTimeAndMaterialPage()
         {
             //Home page object initialization and definition
-            HomePage homePageObj = new HomePage();
+            
             homePageObj.GoToTMPage(driver);
 
         }
@@ -36,45 +41,43 @@ namespace April2022.StepDefinitions
         public void WhenICreateANewTimeAndMaterialRecord()
         {
             //TM page object initialization and definition
-            TMPage tMPageObj = new TMPage();
+            
             tMPageObj.CreateTM(driver);
         }
 
         [Then(@"the record should be created successfully")]
         public void ThenTheRecordShouldBeCreatedSuccessfully()
         {
-            TMPage tMPageObj = new TMPage();
-
             string newCode = tMPageObj.GetCode(driver);
             string newTypeCode = tMPageObj.GetTypeCode(driver);
             string newDescription = tMPageObj.GetDescription(driver);
             string newPrice = tMPageObj.GetPrice(driver);
 
-            Assert.That(newCode == "April2022", "Actual code and expected code");
+            Assert.That(newCode == "April2022", "Actual code and expected code do not match");
             Assert.That(newTypeCode == "M", "Actual typecode and expected typecode do not match");
             Assert.That(newDescription == "April2022", "Actual description and expected description do not match");
             Assert.That(newPrice == "$12.00", "Actual price and expected price do not match");
         }
             
 
-        [When(@"I update '([^']*)' on an existing time and material record")]
-        public void WhenIUpdateOnAnExistingTimeAndMaterialRecord(string p0)
+        [When(@"I update '([^']*)' , '([^']*)' and '([^']*)' on an existing time and material record")]
+        public void WhenIUpdateAndOnAnExistingTimeAndMaterialRecord(string p0, string p1, string p2)
         {
-            //TM page object initialization and definition
-            TMPage tMPageObj = new TMPage();
-            tMPageObj.EditTM(driver, p0);
+            tMPageObj.EditTM(driver, p0, p1, p2);
         }
 
-        [Then(@"the record should have the updated '([^']*)'")]
-        public void ThenTheRecordShouldHaveTheUpdated(string p0 )
+        [Then(@"the record should have the updated '([^']*)' , '([^']*)' and '([^']*)'")]
+        public void ThenTheRecordShouldHaveTheUpdatedAnd(string p0, string p1, string p2)
         {
-            TMPage tMPageObj = new TMPage();
-
             string editedDescription = tMPageObj.GetEditedDescription(driver);
+            string editedCode = tMPageObj.GetEditedCode(driver);
+            string editedPrice = tMPageObj .GetEditedPrice(driver);
 
-            Assert.That(editedDescription == p0, "Actual description and expected description do not match");
-
+            Assert.That(editedDescription == "Actual description and expected description do not match");
+            Assert.That(editedCode == "Actual code and expected code do not match");
+            Assert.That(editedPrice == "Actual price and expected price do not match");
         }
+
 
     }
 }
